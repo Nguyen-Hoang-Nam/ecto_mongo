@@ -45,6 +45,8 @@ defmodule EctoMongo.Repo do
       end
 
       def insert(struct) do
+        repo = get_dynamic_repo()
+        EctoMongo.Repo.Schema.insert(__MODULE__, repo, struct)
       end
 
       def update(struct, opts \\ []) do
