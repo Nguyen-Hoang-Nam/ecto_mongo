@@ -12,11 +12,19 @@ defmodule EctoMongo.Repo.Schema do
          name,
          %Ecto.Changeset{valid?: true, data: %{__struct__: module}} = changeset
        ) do
-    name
-    |> Mongo.insert_one(module.__document__(:source), changeset)
+    changeset
+    |> Ecto.Changeset.apply_action(:insert)
     |> case do
-      {:ok, _} = v ->
-        v
+      {:ok, v} ->
+        :mongo
+        |> Mongo.insert_one(module.__document__(:source), v)
+        |> case do
+          {:ok, _} = v ->
+            v
+
+          e ->
+            e
+        end
 
       e ->
         e

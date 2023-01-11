@@ -20,11 +20,13 @@ defmodule EctoMongo.RepoTest do
   end
 
   setup do
-    _ = PrepareRepo.start_link(url: "mongodb://localhost:27017/hello")
+    _ = PrepareRepo.start_link(url: "mongodb://localhost:27017/hello", name: :mongo)
     :ok
   end
 
   test "all" do
+    assert {:ok, v} = %MyParent{} |> MyParent.changeset(%{n: 1}) |> PrepareRepo.insert()
+
     assert [%{n: 1} | _] =
              MyParent
              |> EctoMongo.Query.query(%{n: 1})

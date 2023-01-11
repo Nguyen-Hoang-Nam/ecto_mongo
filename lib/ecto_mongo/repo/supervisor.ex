@@ -1,6 +1,8 @@
 defmodule EctoMongo.Repo.Supervisor do
   use Supervisor
 
+  require Logger
+
   @defaults [timeout: 15000, pool_size: 10]
 
   def start_link(repo, otp_app, opts) do
@@ -46,10 +48,20 @@ defmodule EctoMongo.Repo.Supervisor do
     end
   end
 
+  def start_child({mod, fun, args}) do
+    case apply(mod, fun, args) do
+      {:ok, pid} ->
+        {:ok, pid}
+
+      other ->
+        other
+    end
+  end
+
   defp wrap_child_spec(database_config) do
     %{
       id: Mongo,
-      start: {Mongo, :start_link, [database_config]}
+      start: {__MODULE__, :start_child, [{Mongo, :start_link, [database_config]}]}
     }
   end
 end

@@ -4,14 +4,14 @@ defmodule EctoMongo.Repo.Queryable do
   def all(name, queryable) do
     query = queryable |> EctoMongo.Queryable.to_query()
 
-    execute(:all, name, query) |> elem(1)
+    execute(:all, name, query)
   end
 
   defp execute(operation, name, %{from: %{source: source}, query: query}) do
     operation
     |> case do
       :all ->
-        name
+        :mongo
         |> Mongo.find(source, query)
     end
   end
