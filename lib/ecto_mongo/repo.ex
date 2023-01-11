@@ -44,7 +44,7 @@ defmodule EctoMongo.Repo do
       def roll_back(value) do
       end
 
-      def insert(struct, opts \\ []) do
+      def insert(struct) do
       end
 
       def update(struct, opts \\ []) do
@@ -53,7 +53,7 @@ defmodule EctoMongo.Repo do
       def delete(struct, opts \\ []) do
       end
 
-      def insert!(struct, opts \\ []) do
+      def insert!(struct) do
       end
 
       def update!(struct, opts \\ []) do
