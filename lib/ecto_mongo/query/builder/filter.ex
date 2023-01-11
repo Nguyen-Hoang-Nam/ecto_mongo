@@ -1,7 +1,7 @@
 defmodule EctoMongo.Query.Builder.Filter do
   def build(:filter, :and, queryable, expr) do
     quote do
-      %{query: query} =
+      unquote_queryable =
         unquote(queryable)
         |> is_atom()
         |> case do
@@ -12,7 +12,9 @@ defmodule EctoMongo.Query.Builder.Filter do
             unquote(queryable)
         end
 
-      %{query: query |> Map.merge(unquote(expr))}
+      %{query: query} = unquote_queryable
+
+      %{unquote_queryable | query: query |> Map.merge(unquote(expr))}
     end
   end
 end

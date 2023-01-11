@@ -9,7 +9,7 @@ end
 defimpl EctoMongo.Queryable, for: Atom do
   def to_query(module) do
     try do
-      module.__schema__(:query)
+      module.__document__(:query)
     rescue
       UndefinedFunctionError ->
         message =
