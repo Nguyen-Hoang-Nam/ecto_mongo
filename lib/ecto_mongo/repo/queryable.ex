@@ -1,6 +1,5 @@
 defmodule EctoMongo.Repo.Queryable do
   require EctoMongo.Query
-  require Logger
 
   def all(name, queryable) do
     query = queryable |> EctoMongo.Queryable.to_query()
@@ -20,24 +19,44 @@ defmodule EctoMongo.Repo.Queryable do
       :all ->
         name
         |> Mongo.find(source, query)
+        |> case do
+          %{docs: docs} ->
+            docs
+            |> Enum.map(fn doc ->
+              module
+              |> to_struct(doc)
+            end)
+
+          {:error, e} ->
+            e
+        end
 
       :one ->
         name
         |> Mongo.find_one(source, query)
         |> case do
-          {:error, _} = e ->
+          {:error, e} ->
             e
 
           nil ->
-            {:ok, nil}
+            nil
 
           document ->
-            document |> inspect() |> Logger.error()
-
             module
-            |> struct(document)
-            |> Ecto.Changeset.apply_action(:document)
+            |> to_struct(document)
         end
     end
+  end
+
+  # Credit: https://groups.google.com/g/elixir-lang-talk/c/6geXOLUeIpI/m/L9einu4EEAAJ
+  def to_struct(kind, attrs) do
+    struct = struct(kind)
+
+    Enum.reduce(Map.to_list(struct), struct, fn {k, _}, acc ->
+      case Map.fetch(attrs, Atom.to_string(k)) do
+        {:ok, v} -> %{acc | k => v}
+        :error -> acc
+      end
+    end)
   end
 end
