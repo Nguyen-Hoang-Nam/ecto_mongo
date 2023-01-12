@@ -12,13 +12,13 @@ defmodule EctoMongo.Document do
       def __document__(:query) do
         %EctoMongo.Query{
           from: %EctoMongo.Query.FromExpr{
-            source: unquote(source)
+            source: {unquote(source), __MODULE__}
           }
         }
       end
 
       def __document__(:source) do
-        unquote(source)
+        {unquote(source), __MODULE__}
       end
 
       Ecto.Schema.embedded_schema do

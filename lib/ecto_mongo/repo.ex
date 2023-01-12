@@ -65,11 +65,13 @@ defmodule EctoMongo.Repo do
       end
 
       def all(queryable) do
-        repo = get_dynamic_repo()
-        EctoMongo.Repo.Queryable.all(repo, queryable)
+        get_dynamic_repo()
+        |> EctoMongo.Repo.Queryable.all(queryable)
       end
 
       def one(queryable, opts \\ []) do
+        get_dynamic_repo()
+        |> EctoMongo.Repo.Queryable.one(queryable)
       end
 
       def aggregate(queryable, aggregate, opts \\ [])

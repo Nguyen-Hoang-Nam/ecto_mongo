@@ -20,8 +20,8 @@ defmodule EctoMongo.Query.Builder.Filter do
       {:in, v} -> {"$in", v}
       {:lt, v} -> {"$lt", v}
       {:lte, v} -> {"$lte", v}
-      {:ne, v} -> {"$ne", v}
-      {:nin, v} -> {"$nin", v}
+      {:ne, v} when v |> is_list() -> {"$ne", v}
+      {:nin, v} when v |> is_list() -> {"$nin", v}
       _ -> nil
     end)
     |> Enum.reject(&is_nil/1)

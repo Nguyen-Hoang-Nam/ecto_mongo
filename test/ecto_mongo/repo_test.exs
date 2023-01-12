@@ -27,6 +27,8 @@ defmodule EctoMongo.RepoTest do
   test "all" do
     assert {:ok, _} = %MyParent{} |> MyParent.changeset(%{n: 1}) |> PrepareRepo.insert()
 
+    assert {:ok, _} = MyParent |> EctoMongo.Query.query(n: 1) |> PrepareRepo.one()
+
     assert [%{n: 1} | _] =
              MyParent
              |> EctoMongo.Query.query(n: %{gt: 0})

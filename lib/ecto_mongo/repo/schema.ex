@@ -17,7 +17,7 @@ defmodule EctoMongo.Repo.Schema do
     |> case do
       {:ok, v} ->
         name
-        |> Mongo.insert_one(module.__document__(:source), v)
+        |> Mongo.insert_one(module.__document__(:source) |> elem(0), v)
         |> case do
           {:ok, _} = v ->
             v

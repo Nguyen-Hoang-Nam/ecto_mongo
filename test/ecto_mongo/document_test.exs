@@ -15,7 +15,7 @@ defmodule EctoMongo.DocumentTest do
   end
 
   test "Document Metadata" do
-    assert Document.__document__(:source) == @document_name
+    assert Document.__document__(:source) == {@document_name, Document}
   end
 
   # test "Types Metadata" do
