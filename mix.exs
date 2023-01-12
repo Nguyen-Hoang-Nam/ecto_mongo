@@ -20,8 +20,7 @@ defmodule EctoMongo.MixProject do
   defp deps do
     [
       {:mongodb_driver, "~> 1.0"},
-      {:ecto, "~> 3.9"},
-      {:make_enumerable, "~> 0.0.1"}
+      {:ecto, "~> 3.9"}
     ]
   end
 end

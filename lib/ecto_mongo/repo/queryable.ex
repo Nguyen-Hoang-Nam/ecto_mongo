@@ -11,7 +11,7 @@ defmodule EctoMongo.Repo.Queryable do
     operation
     |> case do
       :all ->
-        :mongo
+        name
         |> Mongo.find(source, query)
     end
   end

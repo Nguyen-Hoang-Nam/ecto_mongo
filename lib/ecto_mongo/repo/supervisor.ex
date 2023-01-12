@@ -1,13 +1,10 @@
 defmodule EctoMongo.Repo.Supervisor do
   use Supervisor
 
-  require Logger
-
   @defaults [timeout: 15000, pool_size: 10]
 
   def start_link(repo, otp_app, opts) do
-    sup_opts = []
-    Supervisor.start_link(__MODULE__, {repo, otp_app, opts}, sup_opts)
+    Supervisor.start_link(__MODULE__, {repo, otp_app, opts |> Keyword.put(:name, repo)}, [])
   end
 
   def runtime_config(type, repo, otp_app, opts) do
