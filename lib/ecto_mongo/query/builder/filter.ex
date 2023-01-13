@@ -1,12 +1,20 @@
 defmodule EctoMongo.Query.Builder.Filter do
+  require Logger
+
   def escape(expr) when is_list(expr) do
-    expr
-    |> Enum.map(fn
-      {k, v} -> {k, v |> escape()}
-      _ -> nil
-    end)
-    |> Enum.reject(&is_nil/1)
-    |> Map.new()
+    expr =
+      expr
+      |> Enum.map(fn
+        {k, v} -> {k, v |> escape()}
+        _ -> nil
+      end)
+      |> Enum.reject(&is_nil/1)
+
+    {:%{}, [], expr}
+  end
+
+  def escape({:^, _, [var]}) do
+    var
   end
 
   def escape({:%{}, _, expr}) when is_list(expr) do
@@ -23,7 +31,6 @@ defmodule EctoMongo.Query.Builder.Filter do
       _ -> nil
     end)
     |> Enum.reject(&is_nil/1)
-    |> Map.new()
   end
 
   def escape(value) do
@@ -31,7 +38,7 @@ defmodule EctoMongo.Query.Builder.Filter do
   end
 
   def build(:filter, :and, queryable, expr) do
-    escape_expr = expr |> escape() |> Macro.escape()
+    escape_expr = expr |> escape()
 
     quote do
       unquote_queryable =

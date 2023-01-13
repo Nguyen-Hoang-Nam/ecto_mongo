@@ -23,12 +23,16 @@ defmodule EctoMongo.Repo.Schema do
         |> Mongo.insert_one(module.__document__(:source) |> elem(0), v)
         |> case do
           {:ok, %{inserted_id: id}} ->
-            name
-            |> EctoMongo.Repo.Queryable.one(
-              module
-              |> EctoMongo.Query.query(_id: ^id)
-              |> tap(fn v -> v |> inspect() |> Logger.error() end)
-            )
+            # module
+            # |> EctoMongo.Query.query(_id: ^id)
+            # |> tap(fn v -> v |> inspect() |> Logger.error() end)
+
+            {:ok,
+             name
+             |> EctoMongo.Repo.Queryable.one(
+               module
+               |> EctoMongo.Query.query(_id: ^id)
+             )}
 
           e ->
             e
