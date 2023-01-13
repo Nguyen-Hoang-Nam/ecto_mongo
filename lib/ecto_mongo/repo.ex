@@ -49,7 +49,9 @@ defmodule EctoMongo.Repo do
         EctoMongo.Repo.Schema.insert(__MODULE__, repo, struct)
       end
 
-      def update(struct, opts \\ []) do
+      def update(queryable, struct) do
+        repo = get_dynamic_repo()
+        EctoMongo.Repo.Schema.update(__MODULE__, repo, queryable, struct)
       end
 
       def delete(struct, opts \\ []) do
@@ -69,7 +71,7 @@ defmodule EctoMongo.Repo do
         |> EctoMongo.Repo.Queryable.all(queryable)
       end
 
-      def one(queryable, opts \\ []) do
+      def one(queryable) do
         get_dynamic_repo()
         |> EctoMongo.Repo.Queryable.one(queryable)
       end

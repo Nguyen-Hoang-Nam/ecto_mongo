@@ -28,6 +28,11 @@ defmodule EctoMongo.RepoTest do
     assert {:ok, %MyParent{n: 1}} =
              %MyParent{} |> MyParent.changeset(%{n: 1}) |> PrepareRepo.insert()
 
+    assert {:ok, %MyParent{n: 2}} =
+             MyParent
+             |> EctoMongo.Query.query(n: 1)
+             |> PrepareRepo.update(%MyParent{} |> MyParent.changeset(%{n: 2}))
+
     assert %MyParent{n: 1} = MyParent |> EctoMongo.Query.query(n: 1) |> PrepareRepo.one()
 
     assert [%MyParent{n: 1} | _] =

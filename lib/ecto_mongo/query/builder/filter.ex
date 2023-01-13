@@ -1,6 +1,4 @@
 defmodule EctoMongo.Query.Builder.Filter do
-  require Logger
-
   def escape(expr) when is_list(expr) do
     expr =
       expr
